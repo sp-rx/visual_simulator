@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,9 +58,16 @@ h1 {
   margin-top: 7px;
 }
 
-/* CONTROLS */
+/* --------------------------------
+   CONTROLS
+-------------------------------- */
 
 .controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 12px;
+
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -70,11 +76,30 @@ h1 {
 }
 
 .control {
-  margin-bottom: 17px;
+  min-width: 0;
+  margin-bottom: 0;
 }
 
-.control:last-of-type {
-  margin-bottom: 12px;
+/* Sphere and AA: first row */
+.controls > .control:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.controls > .control:nth-child(4) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Cylinder and Axis: second row */
+.controls > .control:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.controls > .control:nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
 }
 
 .control-heading {
@@ -95,6 +120,7 @@ h1 {
   font-weight: 600;
   color: var(--green);
   text-align: right;
+  white-space: nowrap;
 }
 
 input[type="range"] {
@@ -107,6 +133,7 @@ input[type="range"] {
 }
 
 /* Chrome, Edge, Safari */
+
 input[type="range"]::-webkit-slider-runnable-track {
   height: 8px;
   border-radius: 10px;
@@ -135,6 +162,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Firefox */
+
 input[type="range"]::-moz-range-track {
   height: 8px;
   border-radius: 10px;
@@ -158,12 +186,14 @@ input[type="range"]::-moz-range-thumb {
 .range-limits {
   display: flex;
   justify-content: space-between;
+  gap: 5px;
   font-size: 10px;
   color: var(--muted);
   margin-top: 3px;
 }
 
 .reset-row {
+  grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
 }
@@ -183,17 +213,13 @@ button:hover {
   background: var(--green-dark);
 }
 
-/* VISION PANELS */
-
-.section-heading {
-  font-size: 10px;
-  font-weight: 600;
-  margin: 22px 0 12px;
-}
+/* --------------------------------
+   VISION PANELS
+-------------------------------- */
 
 .vision-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -245,6 +271,10 @@ canvas {
   height: 100%;
 }
 
+/* --------------------------------
+   CARD FOOTER
+-------------------------------- */
+
 .card-footer {
   padding: 10px 13px 12px;
   display: flex;
@@ -253,9 +283,22 @@ canvas {
   gap: 8px;
 }
 
+.card-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
 .defocus {
   font-size: 12px;
   font-weight: 700;
+}
+
+.working-effort {
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--text);
 }
 
 .status {
@@ -286,7 +329,12 @@ canvas {
   text-align: center;
 }
 
+/* --------------------------------
+   MOBILE
+-------------------------------- */
+
 @media (max-width: 600px) {
+
   body {
     padding: 12px;
   }
@@ -297,10 +345,13 @@ canvas {
 
   .controls {
     padding: 14px;
+    column-gap: 10px;
+    row-gap: 12px;
   }
 
   .vision-grid {
-    gap: 9px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
   }
 
   .card-heading {
@@ -322,19 +373,36 @@ canvas {
 
   .card-footer {
     padding: 8px;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
   }
 
   .defocus {
     font-size: 10px;
   }
 
+  .working-effort {
+    font-size: 9px;
+  }
+
   .status {
     font-size: 9px;
     padding: 4px 6px;
   }
-}
 
+  .control-name {
+    font-size: 10px;
+  }
+
+  .control-value {
+    font-size: 10px;
+  }
+
+  .range-limits {
+    font-size: 8px;
+  }
+}
 </style>
 </head>
 
@@ -344,12 +412,16 @@ canvas {
 
 <header>
   <div class="brand">KIARA OPTOMETRY</div>
+
   <div class="subtitle">
     Prescription Visual Simulator - Explore how prescription and accommodation affect vision at different distances
   </div>
 </header>
 
 
+<!-- --------------------------------
+     VISION PANELS
+-------------------------------- -->
 
 <section class="vision-grid">
 
@@ -361,14 +433,20 @@ canvas {
       </div>
       <div class="demand">0.00 D</div>
     </div>
+
     <div class="canvas-wrap">
       <canvas id="canvas0"></canvas>
     </div>
+
     <div class="card-footer">
-      <span class="defocus" id="defocus0">0.00 D</span>
+      <div class="card-metrics">
+        <span class="working-effort" id="defocus0">0.00 D</span>
+        <span class="working-effort" id="effort0">Working Effort: 0.00 D (0%)</span>
+      </div>
       <span class="status" id="status0">Clear</span>
     </div>
   </article>
+
 
   <article class="vision-card">
     <div class="card-heading">
@@ -378,14 +456,20 @@ canvas {
       </div>
       <div class="demand">0.50 D</div>
     </div>
+
     <div class="canvas-wrap">
       <canvas id="canvas1"></canvas>
     </div>
+
     <div class="card-footer">
-      <span class="defocus" id="defocus1">0.00 D</span>
+      <div class="card-metrics">
+        <span class="working-effort" id="defocus1">0.00 D</span>
+        <span class="working-effort" id="effort1">Working Effort: 0.00 D (0%)</span>
+      </div>
       <span class="status" id="status1">Clear</span>
     </div>
   </article>
+
 
   <article class="vision-card">
     <div class="card-heading">
@@ -395,14 +479,20 @@ canvas {
       </div>
       <div class="demand">1.00 D</div>
     </div>
+
     <div class="canvas-wrap">
       <canvas id="canvas2"></canvas>
     </div>
+
     <div class="card-footer">
-      <span class="defocus" id="defocus2">0.00 D</span>
+      <div class="card-metrics">
+        <span class="working-effort" id="defocus2">0.00 D</span>
+        <span class="working-effort" id="effort2">Working Effort: 0.00 D (0%)</span>
+      </div>
       <span class="status" id="status2">Clear</span>
     </div>
   </article>
+
 
   <article class="vision-card">
     <div class="card-heading">
@@ -412,14 +502,20 @@ canvas {
       </div>
       <div class="demand">2.00 D</div>
     </div>
+
     <div class="canvas-wrap">
       <canvas id="canvas3"></canvas>
     </div>
+
     <div class="card-footer">
-      <span class="defocus" id="defocus3">0.00 D</span>
+      <div class="card-metrics">
+        <span class="working-effort" id="defocus3">0.00 D</span>
+        <span class="working-effort" id="effort3">Working Effort: 0.00 D (0%)</span>
+      </div>
       <span class="status" id="status3">Clear</span>
     </div>
   </article>
+
 
   <article class="vision-card">
     <div class="card-heading">
@@ -429,14 +525,20 @@ canvas {
       </div>
       <div class="demand">2.50 D</div>
     </div>
+
     <div class="canvas-wrap">
       <canvas id="canvas4"></canvas>
     </div>
+
     <div class="card-footer">
-      <span class="defocus" id="defocus4">0.00 D</span>
+      <div class="card-metrics">
+        <span class="working-effort" id="defocus4">0.00 D</span>
+        <span class="working-effort" id="effort4">Working Effort: 0.00 D (0%)</span>
+      </div>
       <span class="status" id="status4">Clear</span>
     </div>
   </article>
+
 
   <article class="vision-card">
     <div class="card-heading">
@@ -446,11 +548,16 @@ canvas {
       </div>
       <div class="demand">3.33 D</div>
     </div>
+
     <div class="canvas-wrap">
       <canvas id="canvas5"></canvas>
     </div>
+
     <div class="card-footer">
-      <span class="defocus" id="defocus5">0.00 D</span>
+      <div class="card-metrics">
+        <span class="working-effort" id="defocus5">0.00 D</span>
+        <span class="working-effort" id="effort5">Working Effort: 0.00 D (0%)</span>
+      </div>
       <span class="status" id="status5">Clear</span>
     </div>
   </article>
@@ -458,33 +565,48 @@ canvas {
 </section>
 
 
+<!-- --------------------------------
+     CONTROLS
+-------------------------------- -->
+
 <section class="controls">
+
+  <!-- SPHERE -->
 
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">Sphere - The state of your vision's depth. A longer eye ball sees near easier and a shorter eye ball sees far easier. People wear glasses to see depths that they can't see on their own. Ideally is to see everything clearly.</span>
+      <span class="control-name">
+        Sphere - The state of your vision's depth. A longer eye ball sees near easier and a shorter eye ball sees far easier. People wear glasses to see depths that they can't see on their own. Ideally is to see everything clearly.
+      </span>
+
       <span class="control-value" id="sphereValue">0.00 D</span>
     </div>
 
     <input
       type="range"
       id="sphere"
-      min="-10"
-      max="10"
+      min="-8"
+      max="5"
       step="0.25"
       value="0"
     >
 
     <div class="range-limits">
-      <span>−10.00 D (Short sighted / Myopia / Longer eye ball length)</span>
-      <span>0.00 D (Plano / Emmetropia / Ideal Eye Ball Length)</span>
-      <span>+10.00 D (Far sighted / Hyperopia / Shorter eye ball length)</span>
+      <span>−8.00 D</span>
+      <span>0.00 D</span>
+      <span>+5.00 D</span>
     </div>
   </div>
 
+
+  <!-- CYLINDER -->
+
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">Cylinder - The unevenness of your eye ball. Round and even eyeballs have no astigmatism. Unevenness like a rugby ball causes astigmatism blurriness. It affects all depths because it is a 2-dimensional blur. </span>
+      <span class="control-name">
+        Cylinder - The unevenness of your eye ball. Unevenness like a rugby ball causes astigmatism blurriness. 
+      </span>
+
       <span class="control-value" id="cylinderValue">0.00 D</span>
     </div>
 
@@ -506,9 +628,15 @@ canvas {
     </div>
   </div>
 
+
+  <!-- CYLINDER AXIS -->
+
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">Cylinder Axis - The direction of the Cylinder unevenness. It is measured in degrees and it can be pointing from 0 to 180 degrees.</span>
+      <span class="control-name">
+        Cylinder Axis - The direction of the Cylinder unevenness. It is measured in degrees and it can be pointing from 0 to 180 degrees.
+      </span>
+
       <span class="control-value" id="cylinderAxisValue">90°</span>
     </div>
 
@@ -526,13 +654,19 @@ canvas {
       <span>45°</span>
       <span>90°</span>
       <span>135°</span>
-      <span>0° / 180°<</span>
+      <span>0° / 180°</span>
     </div>
   </div>
 
+
+  <!-- AMPLITUDE OF ACCOMMODATION -->
+
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">Amplitude of Accommodation (AA) - The amount of strength your eye muscles can produce to see near clearly. It becomes weaker with age. That's when we need lenses to substitute for the loss of clarity.</span>
+      <span class="control-name">
+        Amplitude of Accommodation (AA) - The amount of strength your eye muscles can produce to see near clearly. It becomes weaker with age. That's when we need lenses to substitute for the loss of clarity.
+      </span>
+
       <span class="control-value" id="aaValue">+5.00 D</span>
     </div>
 
@@ -551,12 +685,12 @@ canvas {
     </div>
   </div>
 
+
   <div class="reset-row">
     <button id="resetButton">Reset</button>
   </div>
 
 </section>
-
 
 
 <div class="note">
@@ -565,7 +699,12 @@ canvas {
 
 </div>
 
+
 <script>
+
+/* --------------------------------
+   PERFECT VISION ZONE
+-------------------------------- */
 
 function updatePerfectVisionZone(slider, minZone, maxZone) {
 
@@ -577,21 +716,27 @@ function updatePerfectVisionZone(slider, minZone, maxZone) {
 
   slider.style.setProperty("--zone-start", `${start}%`);
   slider.style.setProperty("--zone-end", `${end}%`);
+
 }
 
+
 // Sphere: -0.25 D to +0.25 D
+
 updatePerfectVisionZone(
   document.getElementById("sphere"),
   -0.25,
   0.25
 );
 
+
 // Cylinder: -0.25 D to 0.00 D
+
 updatePerfectVisionZone(
   document.getElementById("cylinder"),
   -0.25,
   0
 );
+
 
 /* --------------------------------
    VIEWING DISTANCES
@@ -614,21 +759,27 @@ const distances = [
 const imageURLs = [
 
   // Far — mountain scenery
+
   "https://images.unsplash.com/photo-1565209216345-efdd627e46b2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Intermediate Far — 2 metres
+
   "https://images.unsplash.com/photo-1646861039459-fd9e3aabf3fb?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Intermediate Far — 1 metre
+
   "https://images.unsplash.com/photo-1760624591122-e587b406b391?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Intermediate Near — 50 cm
+
   "https://images.unsplash.com/photo-1586880244406-556ebe35f282?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Near — 40 cm
+
   "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Near — 30 cm
+
   "https://images.unsplash.com/photo-1584022068212-4bcfb5e9eb49?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
 
 ];
@@ -700,11 +851,11 @@ function estimateAgeRange(aa) {
   const age = (13.5 - aa) / 0.25;
 
   if (aa <= Number(aaInput.min)) {
-    return `${Math.round(age)} years and older`;
+    return `< ${Math.round(age)} years`;
   }
 
   if (aa >= Number(aaInput.max)) {
-    return `${Math.round(age)} years and younger`;
+    return `> ${Math.round(age)} years`;
   }
 
   return `${Math.round(age)} years`;
@@ -721,7 +872,8 @@ function calculateDefocus(sphere, distance, aa) {
   const objectDemand =
     distance === Infinity ? 0 : 1 / distance;
 
-  const requiredAccommodation = sphere + objectDemand;
+  const requiredAccommodation =
+    sphere + objectDemand;
 
   let residualDefocus = 0;
 
@@ -745,13 +897,50 @@ function calculateDefocus(sphere, distance, aa) {
 
 
 /* --------------------------------
+   WORKING EFFORT CALCULATION
+-------------------------------- */
+
+function calculateWorkingEffort(sphere, distance, aa) {
+
+  const objectDemand =
+    distance === Infinity ? 0 : 1 / distance;
+
+  const requiredAccommodation =
+    sphere + objectDemand;
+
+  /*
+    Negative required accommodation:
+    No accommodation is used.
+
+    Positive required accommodation:
+    Accommodation is used up to the available AA.
+  */
+
+  const accommodationUsed = Math.max(
+    0,
+    Math.min(requiredAccommodation, aa)
+  );
+
+  const percentageUsed = aa > 0
+    ? (accommodationUsed / aa) * 100
+    : null;
+
+  return {
+    accommodationUsed,
+    percentageUsed
+  };
+
+}
+
+
+/* --------------------------------
    SPHERICAL BLUR STRENGTH
 -------------------------------- */
 
 function sphericalBlurRadius(defocus) {
 
-  const strength = 2.0;
-  const exponent = 1.35;
+  const strength = 1.0;
+  const exponent = 1.15;
 
   return Math.min(
     30,
@@ -788,6 +977,7 @@ function drawCover(ctx, img, width, height) {
 
 }
 
+
 /* --------------------------------
    SPHERICAL BLUR — IPAD COMPATIBLE
 -------------------------------- */
@@ -811,6 +1001,7 @@ function drawSphericalBlur(ctx, img, width, height, blurRadius) {
   });
 
   // Draw original image without zooming
+
   drawCover(tempCtx, img, width, height);
 
   const imageData = tempCtx.getImageData(
@@ -826,7 +1017,9 @@ function drawSphericalBlur(ctx, img, width, height, blurRadius) {
 
   const original = new Uint8ClampedArray(data);
 
+
   // Horizontal blur
+
   for (let y = 0; y < h; y++) {
 
     for (let x = 0; x < w; x++) {
@@ -853,12 +1046,16 @@ function drawSphericalBlur(ctx, img, width, height, blurRadius) {
       data[i + 1] = g / count;
       data[i + 2] = b / count;
       data[i + 3] = a / count;
+
     }
   }
 
+
   const horizontal = new Uint8ClampedArray(data);
 
+
   // Vertical blur
+
   for (let y = 0; y < h; y++) {
 
     for (let x = 0; x < w; x++) {
@@ -885,12 +1082,15 @@ function drawSphericalBlur(ctx, img, width, height, blurRadius) {
       data[i + 1] = g / count;
       data[i + 2] = b / count;
       data[i + 3] = a / count;
+
     }
   }
 
   tempCtx.putImageData(imageData, 0, 0);
 
+
   // Draw at exactly the original dimensions
+
   ctx.drawImage(
     tempCanvas,
     0,
@@ -898,7 +1098,9 @@ function drawSphericalBlur(ctx, img, width, height, blurRadius) {
     width,
     height
   );
+
 }
+
 
 /* --------------------------------
    CYLINDER DISTANCE WEIGHTING
@@ -934,15 +1136,15 @@ function drawBlurredImage(
   distance
 ) {
 
-// 1. Spherical blur
+  // 1. Spherical blur
 
-drawSphericalBlur(
-  ctx,
-  img,
-  width,
-  height,
-  blurRadius
-);
+  drawSphericalBlur(
+    ctx,
+    img,
+    width,
+    height,
+    blurRadius
+  );
 
 
   // 2. Cylinder weighting by viewing distance
@@ -1073,6 +1275,15 @@ function renderPanel(index) {
   );
 
 
+  // Calculate working effort
+
+  const workingEffort = calculateWorkingEffort(
+    sphere,
+    distance,
+    aa
+  );
+
+
   // Convert defocus into visual blur
 
   const blurRadius =
@@ -1120,6 +1331,9 @@ function renderPanel(index) {
   const defocusElement =
     document.getElementById("defocus" + index);
 
+  const effortElement =
+    document.getElementById("effort" + index);
+
   const statusElement =
     document.getElementById("status" + index);
 
@@ -1127,6 +1341,22 @@ function renderPanel(index) {
   defocusElement.textContent =
     `Residual defocus: ${defocus.toFixed(2)} D`;
 
+
+  // Update working effort display
+
+  const effortValue =
+    workingEffort.accommodationUsed.toFixed(2);
+
+  const effortPercentage =
+    workingEffort.percentageUsed === null
+      ? "N/A"
+      : `${Math.round(workingEffort.percentageUsed)}%`;
+
+  effortElement.textContent =
+    `Working Effort: ${effortValue} D (${effortPercentage} of AA)`;
+
+
+  // Update clear / blur status
 
   if (defocus < 0.01) {
 
@@ -1231,8 +1461,6 @@ window.addEventListener("resize", renderAll);
 -------------------------------- */
 
 renderAll();
-
-
 
 </script>
 
