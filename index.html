@@ -825,15 +825,48 @@ function drawBlurredImage(
   distance
 ) {
 
-  // 1. Spherical blur
+  // 1. Spherical blur — iPad Safari compatible
 
-  ctx.save();
+  if (blurRadius > 0) {
 
-  ctx.filter = `blur(${blurRadius}px)`;
+    const blurCanvas = document.createElement("canvas");
+    const blurCtx = blurCanvas.getContext("2d");
 
-  drawCover(ctx, img, width, height);
+    const padding = Math.ceil(blurRadius * 3);
 
-  ctx.restore();
+    blurCanvas.width = Math.ceil(width + padding * 2);
+    blurCanvas.height = Math.ceil(height + padding * 2);
+
+    blurCtx.filter = `blur(${blurRadius}px)`;
+
+    drawCover(
+      blurCtx,
+      img,
+      width + padding * 2,
+      height + padding * 2
+    );
+
+    ctx.save();
+
+    ctx.drawImage(
+      blurCanvas,
+      padding,
+      padding,
+      width,
+      height,
+      0,
+      0,
+      width,
+      height
+    );
+
+    ctx.restore();
+
+  } else {
+
+    drawCover(ctx, img, width, height);
+
+  }
 
 
   // 2. Cylinder weighting by viewing distance
