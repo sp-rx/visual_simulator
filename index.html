@@ -788,6 +788,117 @@ function drawCover(ctx, img, width, height) {
 
 }
 
+/* --------------------------------
+   SPHERICAL BLUR — IPAD COMPATIBLE
+-------------------------------- */
+
+function drawSphericalBlur(ctx, img, width, height, blurRadius) {
+
+  if (blurRadius <= 0) {
+    drawCover(ctx, img, width, height);
+    return;
+  }
+
+  const scale = 1;
+
+  const tempCanvas = document.createElement("canvas");
+
+  tempCanvas.width = Math.ceil(width * scale);
+  tempCanvas.height = Math.ceil(height * scale);
+
+  const tempCtx = tempCanvas.getContext("2d", {
+    willReadFrequently: true
+  });
+
+  // Draw original image without zooming
+  drawCover(tempCtx, img, width, height);
+
+  const imageData = tempCtx.getImageData(
+    0, 0, tempCanvas.width, tempCanvas.height
+  );
+
+  const data = imageData.data;
+
+  const w = tempCanvas.width;
+  const h = tempCanvas.height;
+
+  const radius = Math.max(1, Math.round(blurRadius));
+
+  const original = new Uint8ClampedArray(data);
+
+  // Horizontal blur
+  for (let y = 0; y < h; y++) {
+
+    for (let x = 0; x < w; x++) {
+
+      let r = 0, g = 0, b = 0, a = 0;
+      let count = 0;
+
+      for (let k = -radius; k <= radius; k++) {
+
+        const sx = Math.max(0, Math.min(w - 1, x + k));
+        const i = (y * w + sx) * 4;
+
+        r += original[i];
+        g += original[i + 1];
+        b += original[i + 2];
+        a += original[i + 3];
+
+        count++;
+      }
+
+      const i = (y * w + x) * 4;
+
+      data[i] = r / count;
+      data[i + 1] = g / count;
+      data[i + 2] = b / count;
+      data[i + 3] = a / count;
+    }
+  }
+
+  const horizontal = new Uint8ClampedArray(data);
+
+  // Vertical blur
+  for (let y = 0; y < h; y++) {
+
+    for (let x = 0; x < w; x++) {
+
+      let r = 0, g = 0, b = 0, a = 0;
+      let count = 0;
+
+      for (let k = -radius; k <= radius; k++) {
+
+        const sy = Math.max(0, Math.min(h - 1, y + k));
+        const i = (sy * w + x) * 4;
+
+        r += horizontal[i];
+        g += horizontal[i + 1];
+        b += horizontal[i + 2];
+        a += horizontal[i + 3];
+
+        count++;
+      }
+
+      const i = (y * w + x) * 4;
+
+      data[i] = r / count;
+      data[i + 1] = g / count;
+      data[i + 2] = b / count;
+      data[i + 3] = a / count;
+    }
+  }
+
+  tempCtx.putImageData(imageData, 0, 0);
+
+  // Draw at exactly the original dimensions
+  ctx.drawImage(
+    tempCanvas,
+    0,
+    0,
+    width,
+    height
+  );
+}
 
 /* --------------------------------
    CYLINDER DISTANCE WEIGHTING
@@ -823,48 +934,15 @@ function drawBlurredImage(
   distance
 ) {
 
-  // 1. Spherical blur — iPad Safari compatible
+// 1. Spherical blur
 
-  if (blurRadius > 0) {
-
-    const blurCanvas = document.createElement("canvas");
-    const blurCtx = blurCanvas.getContext("2d");
-
-    const padding = Math.ceil(blurRadius * 3);
-
-    blurCanvas.width = Math.ceil(width + padding * 2);
-    blurCanvas.height = Math.ceil(height + padding * 2);
-
-    blurCtx.filter = `blur(${blurRadius}px)`;
-
-    drawCover(
-      blurCtx,
-      img,
-      width + padding * 2,
-      height + padding * 2
-    );
-
-    ctx.save();
-
-    ctx.drawImage(
-      blurCanvas,
-      padding,
-      padding,
-      width,
-      height,
-      0,
-      0,
-      width,
-      height
-    );
-
-    ctx.restore();
-
-  } else {
-
-    drawCover(ctx, img, width, height);
-
-  }
+drawSphericalBlur(
+  ctx,
+  img,
+  width,
+  height,
+  blurRadius
+);
 
 
   // 2. Cylinder weighting by viewing distance
