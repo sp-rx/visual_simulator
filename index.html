@@ -403,6 +403,42 @@ canvas {
     font-size: 8px;
   }
 }
+
+/* Panel background states */
+
+.vision-card.clear {
+  background: #FFFDF7;
+}
+
+.vision-card.semi-blur {
+  background: #FFF4CC;
+}
+
+.vision-card.blur {
+  background: #F8E2DE;
+}
+
+/* Working Effort states */
+
+.working-effort {
+  color: var(--muted);
+}
+
+.working-effort.warning {
+  color: #B58A18;
+  font-weight: 600;
+}
+
+.working-effort.danger {
+  color: #B94A3A;
+  font-weight: 600;
+}
+
+.status.semi-blur {
+  background: #FFF0BD;
+  color: #98720D;
+}
+
 </style>
 </head>
 
@@ -441,7 +477,7 @@ canvas {
     <div class="card-footer">
       <div class="card-metrics">
         <span class="working-effort" id="defocus0">0.00 D</span>
-        <span class="working-effort" id="effort0">Working Effort: 0.00 D (0%)</span>
+        <span class="working-effort" id="effort0">Effort: 0.00 D (0%)</span>
       </div>
       <span class="status" id="status0">Clear</span>
     </div>
@@ -464,7 +500,7 @@ canvas {
     <div class="card-footer">
       <div class="card-metrics">
         <span class="working-effort" id="defocus1">0.00 D</span>
-        <span class="working-effort" id="effort1">Working Effort: 0.00 D (0%)</span>
+        <span class="working-effort" id="effort1">Effort: 0.00 D (0%)</span>
       </div>
       <span class="status" id="status1">Clear</span>
     </div>
@@ -487,7 +523,7 @@ canvas {
     <div class="card-footer">
       <div class="card-metrics">
         <span class="working-effort" id="defocus2">0.00 D</span>
-        <span class="working-effort" id="effort2">Working Effort: 0.00 D (0%)</span>
+        <span class="working-effort" id="effort2">Effort: 0.00 D (0%)</span>
       </div>
       <span class="status" id="status2">Clear</span>
     </div>
@@ -510,7 +546,7 @@ canvas {
     <div class="card-footer">
       <div class="card-metrics">
         <span class="working-effort" id="defocus3">0.00 D</span>
-        <span class="working-effort" id="effort3">Working Effort: 0.00 D (0%)</span>
+        <span class="working-effort" id="effort3">Effort: 0.00 D (0%)</span>
       </div>
       <span class="status" id="status3">Clear</span>
     </div>
@@ -533,7 +569,7 @@ canvas {
     <div class="card-footer">
       <div class="card-metrics">
         <span class="working-effort" id="defocus4">0.00 D</span>
-        <span class="working-effort" id="effort4">Working Effort: 0.00 D (0%)</span>
+        <span class="working-effort" id="effort4">Effort: 0.00 D (0%)</span>
       </div>
       <span class="status" id="status4">Clear</span>
     </div>
@@ -556,7 +592,7 @@ canvas {
     <div class="card-footer">
       <div class="card-metrics">
         <span class="working-effort" id="defocus5">0.00 D</span>
-        <span class="working-effort" id="effort5">Working Effort: 0.00 D (0%)</span>
+        <span class="working-effort" id="effort5">Effort: 0.00 D (0%)</span>
       </div>
       <span class="status" id="status5">Clear</span>
     </div>
@@ -585,14 +621,14 @@ canvas {
     <input
       type="range"
       id="sphere"
-      min="-8"
+      min="-5"
       max="5"
       step="0.25"
       value="0"
     >
 
     <div class="range-limits">
-      <span>−8.00 D</span>
+      <span>−5.00 D</span>
       <span>0.00 D</span>
       <span>+5.00 D</span>
     </div>
@@ -1353,24 +1389,53 @@ function renderPanel(index) {
       : `${Math.round(workingEffort.percentageUsed)}%`;
 
   effortElement.textContent =
-    `Working Effort: ${effortValue} D (${effortPercentage} of AA)`;
+    `Effort: ${effortValue} D - ${effortPercentage}`;
 
+// Working Effort colour thresholds
 
-  // Update clear / blur status
+effortElement.className = "working-effort";
 
-  if (defocus < 0.01) {
+if (workingEffort.percentageUsed !== null) {
 
-    statusElement.textContent = "Clear";
+  if (workingEffort.percentageUsed > 90) {
 
-    statusElement.className = "status clear";
+    effortElement.classList.add("danger");
 
-  } else {
+  } else if (workingEffort.percentageUsed >= 80) {
 
-    statusElement.textContent = "Blur";
-
-    statusElement.className = "status blur";
+    effortElement.classList.add("warning");
 
   }
+
+}
+
+
+// Update panel background and status
+
+const card = canvas.closest(".vision-card");
+
+if (defocus < 0.01) {
+
+  card.className = "vision-card clear";
+
+  statusElement.textContent = "Clear";
+  statusElement.className = "status clear";
+
+} else if (defocus <= 0.75) {
+
+  card.className = "vision-card semi-blur";
+
+  statusElement.textContent = "Semi-blur";
+  statusElement.className = "status semi-blur";
+
+} else {
+
+  card.className = "vision-card blur";
+
+  statusElement.textContent = "Blur";
+  statusElement.className = "status blur";
+
+}
 
 }
 
