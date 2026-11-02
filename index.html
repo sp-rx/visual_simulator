@@ -106,21 +106,27 @@ h1 {
   grid-column: 1 / -1;
 }
 
-/* AA: full row, above Cylinder */
+/* AA: full row, row 3 */
 .controls > .control:nth-child(5) {
   grid-column: 1 / -1;
   grid-row: 3;
 }
 
-/* Cylinder and Axis: share row 4 */
+/* Multifocal ADD: full row, row 4 */
+.controls > .control:nth-child(6) {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+
+/* Cylinder and Axis: row 5 */
 .controls > .control:nth-child(3) {
   grid-column: 1;
-  grid-row: 4;
+  grid-row: 5;
 }
 
 .controls > .control:nth-child(4) {
   grid-column: 2;
-  grid-row: 4;
+  grid-row: 5;
 }
 
 .control-heading {
@@ -908,11 +914,46 @@ canvas {
     </div>
   </div>
 
+
+  <!-- SPECTACLE MULTIFOCAL ADD POWER -->
+
+  <div class="control">
+    <div class="control-heading">
+      <span class="control-title">
+        <span class="control-name">Spectacle Multifocal ADD Power</span>
+        <button type="button" class="info-button"
+                data-definition="multifocalAdd"
+                aria-label="About Multifocal ADD">i</button>
+      </span>
+
+      <span class="control-value" id="multifocalAddValue">+0.00 D</span>
+    </div>
+
+    <input
+      type="range"
+      id="multifocalAdd"
+      min="0"
+      max="5"
+      step="0.25"
+      value="0"
+    >
+
+    <div class="range-limits">
+      <span>0.00 D</span>
+      <span>+1.50 D</span>
+      <span>+3.00 D</span>
+    </div>
+  </div>
+
   <div class="reset-row">
     <button id="resetButton">Reset Everything</button>
   </div>
 
+
+
 </section>
+
+
 
 <div class="note">
   Simulation is an educational illustration. Actual visual experience varies between individuals.
@@ -959,7 +1000,11 @@ const definitions = {
   aa: {
     title: "Amplitude of Accommodation (AA)",
     text: "The eyes are naturally designed to see as far as it could when it relaxes, and they have a muscle which tightens up so you can focus on nearer objects. AA is the amount of strength your eye muscle can produce to see near clearly. It becomes weaker with age. That's when we need lenses to substitute for the loss of strength."
-  }
+  },
+multifocalAdd: {
+  title: "Spectacle Multifocal ADD Power",
+  text: "Additional positive power provided by the near portion of a multifocal spectacle lens. In this simulator, it is added to the eye's Amplitude of Accommodation to calculate the effective accommodation available."
+}
 };
 
 const definitionLightbox = document.getElementById("definitionLightbox");
@@ -1134,6 +1179,12 @@ const spectacleSphereValue = document.getElementById("spectacleSphereValue");
 const cylinderValue = document.getElementById("cylinderValue");
 const cylinderAxisValue = document.getElementById("cylinderAxisValue");
 const aaValue = document.getElementById("aaValue");
+
+const multifocalAddInput =
+  document.getElementById("multifocalAdd");
+
+const multifocalAddValue =
+  document.getElementById("multifocalAddValue");
 
 
 /* --------------------------------
@@ -1583,8 +1634,9 @@ function renderPanel(index) {
   const cylinderAxis =
     Number(cylinderAxisInput.value);
 
-  const aa =
-    Number(aaInput.value);
+const aa =
+  Number(aaInput.value) +
+  Number(multifocalAddInput.value);
 
   const distance =
     distances[index];
@@ -1870,6 +1922,8 @@ function renderAll() {
 
   const aa =
     Number(aaInput.value);
+const multifocalAdd =
+  Number(multifocalAddInput.value);
 
 
   // Display individual sphere values
@@ -1889,13 +1943,16 @@ function renderAll() {
   aaValue.textContent =
     `+${aa.toFixed(2)} D (${estimateAgeRange(aa)})`;
 
+multifocalAddValue.textContent =
+  `+${multifocalAdd.toFixed(2)} D`;
+
 
   for (let i = 0; i < distances.length; i++) {
 
     renderPanel(i);
-updateSphereDescription();
 
   }
+updateSphereDescription();
 
 }
 
@@ -1914,6 +1971,8 @@ cylinderAxisInput.addEventListener("input", renderAll);
 
 aaInput.addEventListener("input", renderAll);
 
+multifocalAddInput.addEventListener("input", renderAll);
+
 
 /* --------------------------------
    RESET
@@ -1931,6 +1990,8 @@ document.getElementById("resetButton")
     cylinderAxisInput.value = 90;
 
     aaInput.value = 5;
+
+multifocalAddInput.value = 0;
 
     renderAll();
 
