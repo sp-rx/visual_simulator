@@ -65,7 +65,7 @@ h1 {
 
 .controls {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr 1fr;
   column-gap: 16px;
   row-gap: 25px;
 
@@ -81,35 +81,31 @@ h1 {
   margin-bottom: 0;
 }
 
-/* Eye Sphere and Spectacle Sphere: first row */
-
+/* Eye Sphere: full row */
 .controls > .control:nth-child(1) {
-  grid-column: 1;
-  grid-row: 1;
+  grid-column: 1 / -1;
 }
 
+/* Spectacle Sphere: full row */
 .controls > .control:nth-child(2) {
-  grid-column: 2;
-  grid-row: 1;
+  grid-column: 1 / -1;
 }
 
-/* Cylinder and Axis: second row */
+/* AA: full row, above Cylinder */
+.controls > .control:nth-child(5) {
+  grid-column: 1 / -1;
+  grid-row: 3;
+}
 
+/* Cylinder and Axis: share row 4 */
 .controls > .control:nth-child(3) {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 4;
 }
 
 .controls > .control:nth-child(4) {
   grid-column: 2;
-  grid-row: 2;
-}
-
-/* AA: third row */
-
-.controls > .control:nth-child(5) {
-  grid-column: 1;
-  grid-row: 3;
+  grid-row: 4;
 }
 
 .control-heading {
@@ -749,7 +745,39 @@ canvas {
   </div>
 
 
-  <!-- CYLINDER -->
+ 
+  <!-- SPECTACLE SPHERE -->
+
+  <div class="control">
+    <div class="control-heading">
+      <span class="control-title">
+        <span class="control-name">Spectacle Sphere Diopter</span>
+        <button type="button" class="info-button"
+                data-definition="specsphere"
+                aria-label="About Spectacle Sphere">i</button>
+      </span>
+
+      <span class="control-value" id="spectacleSphereValue">0.00 D</span>
+    </div>
+
+    <input
+      type="range"
+      id="spectacleSphere"
+      min="-5"
+      max="5"
+      step="0.25"
+      value="0"
+    >
+
+    <div class="range-limits">
+      <span>−5.00 D</span>
+      <span>0.00 D</span>
+      <span>+5.00 D</span>
+    </div>
+  </div>
+
+
+ <!-- CYLINDER -->
 
 
 
@@ -782,38 +810,6 @@ canvas {
       <span>0.00 D</span>
     </div>
   </div>
-
-
-  <!-- SPECTACLE SPHERE -->
-
-  <div class="control">
-    <div class="control-heading">
-      <span class="control-title">
-        <span class="control-name">Spectacle Sphere Diopter</span>
-        <button type="button" class="info-button"
-                data-definition="specsphere"
-                aria-label="About Spectacle Sphere">i</button>
-      </span>
-
-      <span class="control-value" id="spectacleSphereValue">0.00 D</span>
-    </div>
-
-    <input
-      type="range"
-      id="spectacleSphere"
-      min="-5"
-      max="5"
-      step="0.25"
-      value="0"
-    >
-
-    <div class="range-limits">
-      <span>−5.00 D</span>
-      <span>0.00 D</span>
-      <span>+5.00 D</span>
-    </div>
-  </div>
-
 
 
   <!-- CYLINDER AXIS -->
