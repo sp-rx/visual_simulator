@@ -1651,21 +1651,33 @@ function renderPanel(index) {
 
   // Working Effort colour thresholds
 
-  effortElement.className = "working-effort";
+effortElement.className = "working-effort";
 
-  if (workingEffort.percentageUsed !== null) {
+if (workingEffort.percentageUsed !== null) {
 
-    if (workingEffort.percentageUsed > 90) {
+  if (workingEffort.percentageUsed >= 100) {
 
-      effortElement.classList.add("danger");
+    effortElement.classList.add("danger");
+    effortElement.insertAdjacentText("beforeend", " Eye Blurring & Stress");
 
-    } else if (workingEffort.percentageUsed >= 80) {
+  } else if (workingEffort.percentageUsed > 90) {
 
-      effortElement.classList.add("warning");
+    effortElement.classList.add("danger");
+    effortElement.insertAdjacentText("beforeend", " Eye Very Stress");
 
-    }
+  } else if (workingEffort.percentageUsed >= 80) {
+
+    effortElement.classList.add("warning");
+    effortElement.insertAdjacentText("beforeend", " Eye Stress");
+
+  } else if (workingEffort.percentageUsed > 70) {
+
+    effortElement.classList.add("warning");
+    effortElement.insertAdjacentText("beforeend", " Eye Little Stress");
 
   }
+
+}
 
 
   // Update panel background and status
