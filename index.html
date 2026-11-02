@@ -62,6 +62,21 @@ h1 {
 /* --------------------------------
    CONTROLS
 -------------------------------- */
+.controls2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 16px;
+  row-gap: 15px;
+
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 20px;
+  height:50px
+}
+
+
 
 .controls {
   display: grid;
@@ -73,7 +88,7 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .control {
@@ -711,6 +726,20 @@ canvas {
 <!-- --------------------------------
      CONTROLS
 -------------------------------- -->
+<section class="controls2">
+<!-- SPHERE CONDITION DESCRIPTION -->
+
+<span class="control-name"><span id="sphereDescription">
+    
+</span>
+  <span id="sphereDescriptionText">
+    
+  </span>
+</span>
+
+
+</section>
+
 
 <section class="controls">
 
@@ -869,11 +898,13 @@ canvas {
       max="5"
       step="0.25"
       value="5"
+  style="direction: rtl;"
+
     >
 
     <div class="range-limits">
-      <span>0.00 D</span>
       <span>+5.00 D</span>
+      <span>0.00 D</span>
     </div>
   </div>
 
@@ -1663,18 +1694,14 @@ if (workingEffort.percentageUsed !== null) {
   } else if (workingEffort.percentageUsed > 90) {
 
     effortElement.classList.add("danger");
-    effortElement.insertAdjacentText("beforeend", " Eye Very Stress");
+    effortElement.insertAdjacentText("beforeend", " Eye Stress Intense ");
 
   } else if (workingEffort.percentageUsed >= 80) {
 
     effortElement.classList.add("warning");
-    effortElement.insertAdjacentText("beforeend", " Eye Stress");
+    effortElement.insertAdjacentText("beforeend", " Eye Stress Starts");
 
-  } else if (workingEffort.percentageUsed > 70) {
-
-    effortElement.classList.add("warning");
-    effortElement.insertAdjacentText("beforeend", " Eye Little Stress");
-
+ 
   }
 
 }
@@ -1706,6 +1733,119 @@ if (workingEffort.percentageUsed !== null) {
     statusElement.className = "status blur";
 
   }
+
+}
+
+/* --------------------------------
+   SPHERE CONDITION DESCRIPTION
+-------------------------------- */
+
+function updateSphereDescription() {
+
+  const eyeSphere = Number(sphereInput.value);
+  const spectacleSphere = Number(spectacleSphereInput.value);
+
+  const difference = spectacleSphere - eyeSphere;
+
+  const descriptionElement =
+    document.getElementById("sphereDescriptionText");
+
+  const amount = Math.abs(difference).toFixed(2);
+
+  let description = "";
+
+  // Both are plano
+  if (eyeSphere === 0 && spectacleSphere === 0) {
+
+    description = "Plano with no spherical correction difference.";
+
+  }
+
+  // Myopia
+  else if (eyeSphere < 0) {
+
+    if (difference < 0) {
+
+      description =
+        `Myopia with over-correction of -${amount} D. ` +
+        "Unnecessary over-correction can lead to tired and uncomfortable vision. Duochrome objects in blue side clearer than red.";
+
+    } else if (difference > 0) {
+
+      description =
+        `Myopia with under-correction of +${amount} D. ` +
+        "Under-correction may improve near vision comfort but may not allow you to see as far as possible. Duochrome objects in red side clearer than blue.";
+
+    } else {
+
+      description =
+        "Myopia with full spherical correction.";
+
+    }
+
+  }
+
+  // Plano eye
+  else if (eyeSphere === 0) {
+
+    if (spectacleSphere < 0) {
+
+      description =
+        `Plano with over-correction of -${amount} D. ` +
+        "Unnecessary over-correction can lead to tired and uncomfortable vision.";
+
+    } else {
+
+      description =
+        `Plano with under-correction of +${amount} D. ` +
+        "Under-correction may improve near vision but reduces far vision capability.";
+
+    }
+
+  }
+
+  // Hyperopia
+  else if (eyeSphere > 0) {
+
+    // Minus spectacle power
+    if (spectacleSphere < 0) {
+
+      description =
+        "Hyperopia with unsuitable spectacle prescription. " +
+        "The current spectacle prescription is not suitable. " +
+        "Recommended to undergo a refraction test and make new spectacles.";
+
+    // Plano spectacles
+    } else if (spectacleSphere === 0) {
+
+      description =
+        "Hyperopia with no spectacle correction or spectacles with zero power. " +
+        "Plus powers are recommended only during near vision tasks if eye stress exist.";
+
+    // More plus spectacle power
+    } else if (difference < 0) {
+
+      description =
+        `Hyperopia with under-correction of +${amount} D. ` +
+        "The spectacles help relieve stress from during near vision.";
+
+    // Less plus spectacle power
+    } else if (difference > 0) {
+
+      description =
+        `Hyperopia with over-correction of -${amount} D. ` +
+        "Helps to improve near vision comfort but reduces far vision capability. Duochrome objects on the red side appear clearer than those on the blue side.";
+
+    } else {
+
+      description =
+        "Hyperopia with full spherical correction.";
+
+    }
+
+  }
+
+  descriptionElement.textContent = description;
 
 }
 
@@ -1753,6 +1893,7 @@ function renderAll() {
   for (let i = 0; i < distances.length; i++) {
 
     renderPanel(i);
+updateSphereDescription();
 
   }
 
