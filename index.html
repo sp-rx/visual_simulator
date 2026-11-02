@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
 
 body {
   margin: 0;
-  padding: 20px;
+  padding: 30px;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
@@ -35,7 +36,7 @@ body {
 
 header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .brand {
@@ -66,12 +67,12 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 16px;
-  row-gap: 12px;
+  row-gap: 25px;
 
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 18px;
+  padding: 12px;
   margin-top: 20px;
 }
 
@@ -80,26 +81,35 @@ h1 {
   margin-bottom: 0;
 }
 
-/* Sphere and AA: first row */
+/* Eye Sphere and Spectacle Sphere: first row */
+
 .controls > .control:nth-child(1) {
   grid-column: 1;
   grid-row: 1;
 }
 
-.controls > .control:nth-child(4) {
+.controls > .control:nth-child(2) {
   grid-column: 2;
   grid-row: 1;
 }
 
 /* Cylinder and Axis: second row */
-.controls > .control:nth-child(2) {
+
+.controls > .control:nth-child(3) {
   grid-column: 1;
   grid-row: 2;
 }
 
-.controls > .control:nth-child(3) {
+.controls > .control:nth-child(4) {
   grid-column: 2;
   grid-row: 2;
+}
+
+/* AA: third row */
+
+.controls > .control:nth-child(5) {
+  grid-column: 1;
+  grid-row: 3;
 }
 
 .control-heading {
@@ -107,7 +117,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 }
 
 .control-name {
@@ -219,7 +229,7 @@ button:hover {
 
 .vision-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -296,8 +306,8 @@ canvas {
 }
 
 .working-effort {
-  font-size: 10px;
-  line-height: 1.3;
+  font-size: 12px;
+  line-height: 1.1;
   color: var(--text);
 }
 
@@ -344,7 +354,7 @@ canvas {
   }
 
   .controls {
-    padding: 14px;
+    padding: 4px;
     column-gap: 10px;
     row-gap: 12px;
   }
@@ -383,7 +393,7 @@ canvas {
   }
 
   .working-effort {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .status {
@@ -439,6 +449,116 @@ canvas {
   color: #98720D;
 }
 
+/* --------------------------------
+   DEFINITION LIGHTBOX
+-------------------------------- */
+
+.control-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.info-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+  min-width: 17px;
+  padding: 0;
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.info-button:hover {
+  background: var(--green);
+  color: white;
+}
+
+.definition-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(25, 30, 26, 0.48);
+}
+
+.definition-lightbox.open {
+  display: flex;
+}
+
+.definition-box {
+  position: relative;
+  width: min(100%, 420px);
+  padding: 25px 24px 23px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.20);
+}
+
+.definition-title {
+  margin: 0 35px 12px 0;
+  color: var(--green-dark);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.definition-text {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.definition-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 23px;
+  line-height: 1;
+}
+
+.definition-close:hover {
+  background: #EDEAE2;
+  color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .definition-box {
+    padding: 23px 20px 21px;
+  }
+
+  .definition-title {
+    font-size: 17px;
+  }
+
+  .definition-text {
+    font-size: 13px;
+  }
+}
+
 </style>
 </head>
 
@@ -447,13 +567,10 @@ canvas {
 <div class="container">
 
 <header>
-  <div class="brand">KIARA OPTOMETRY</div>
-
   <div class="subtitle">
-    Prescription Visual Simulator - Explore how prescription and accommodation affect vision at different distances
+    Kiara Optometry's Prescription Visual Simulator - Explore how prescription and accommodation affect vision at different distances
   </div>
 </header>
-
 
 <!-- --------------------------------
      VISION PANELS
@@ -483,7 +600,6 @@ canvas {
     </div>
   </article>
 
-
   <article class="vision-card">
     <div class="card-heading">
       <div>
@@ -506,8 +622,7 @@ canvas {
     </div>
   </article>
 
-
-  <article class="vision-card">
+  <article style="display:none" class="vision-card">
     <div class="card-heading">
       <div>
         <div class="distance-title">Intermediate Far</div>
@@ -528,7 +643,6 @@ canvas {
       <span class="status" id="status2">Clear</span>
     </div>
   </article>
-
 
   <article class="vision-card">
     <div class="card-heading">
@@ -552,8 +666,7 @@ canvas {
     </div>
   </article>
 
-
-  <article class="vision-card">
+  <article style="display:none" class="vision-card">
     <div class="card-heading">
       <div>
         <div class="distance-title">Near</div>
@@ -574,7 +687,6 @@ canvas {
       <span class="status" id="status4">Clear</span>
     </div>
   </article>
-
 
   <article class="vision-card">
     <div class="card-heading">
@@ -600,19 +712,21 @@ canvas {
 
 </section>
 
-
 <!-- --------------------------------
      CONTROLS
 -------------------------------- -->
 
 <section class="controls">
 
-  <!-- SPHERE -->
+  <!-- EYE SPHERE -->
 
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">
-        Sphere - The state of your vision's depth. A longer eye ball sees near easier and a shorter eye ball sees far easier. People wear glasses to see depths that they can't see on their own. Ideally is to see everything clearly.
+      <span class="control-title">
+        <span class="control-name">Eye Sphere Diopter</span>
+        <button type="button" class="info-button"
+                data-definition="sphere"
+                aria-label="About Eye Sphere">i</button>
       </span>
 
       <span class="control-value" id="sphereValue">0.00 D</span>
@@ -637,10 +751,15 @@ canvas {
 
   <!-- CYLINDER -->
 
+
+
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">
-        Cylinder - The unevenness of your eye ball. Unevenness like a rugby ball causes astigmatism blurriness. 
+      <span class="control-title">
+        <span class="control-name">Cylinder Diopter</span>
+        <button type="button" class="info-button"
+                data-definition="cylinder"
+                aria-label="About Cylinder">i</button>
       </span>
 
       <span class="control-value" id="cylinderValue">0.00 D</span>
@@ -665,12 +784,47 @@ canvas {
   </div>
 
 
+  <!-- SPECTACLE SPHERE -->
+
+  <div class="control">
+    <div class="control-heading">
+      <span class="control-title">
+        <span class="control-name">Spectacle Sphere Diopter</span>
+        <button type="button" class="info-button"
+                data-definition="specsphere"
+                aria-label="About Spectacle Sphere">i</button>
+      </span>
+
+      <span class="control-value" id="spectacleSphereValue">0.00 D</span>
+    </div>
+
+    <input
+      type="range"
+      id="spectacleSphere"
+      min="-5"
+      max="5"
+      step="0.25"
+      value="0"
+    >
+
+    <div class="range-limits">
+      <span>−5.00 D</span>
+      <span>0.00 D</span>
+      <span>+5.00 D</span>
+    </div>
+  </div>
+
+
+
   <!-- CYLINDER AXIS -->
 
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">
-        Cylinder Axis - The direction of the Cylinder unevenness. It is measured in degrees and it can be pointing from 0 to 180 degrees.
+      <span class="control-title">
+        <span class="control-name">Cylinder Axis</span>
+        <button type="button" class="info-button"
+                data-definition="axis"
+                aria-label="About Cylinder Axis">i</button>
       </span>
 
       <span class="control-value" id="cylinderAxisValue">90°</span>
@@ -694,13 +848,15 @@ canvas {
     </div>
   </div>
 
-
   <!-- AMPLITUDE OF ACCOMMODATION -->
 
   <div class="control">
     <div class="control-heading">
-      <span class="control-name">
-        Amplitude of Accommodation (AA) - The amount of strength your eye muscles can produce to see near clearly. It becomes weaker with age. That's when we need lenses to substitute for the loss of clarity.
+      <span class="control-title">
+        <span class="control-name">Amplitude of Accommodation (AA)</span>
+        <button type="button" class="info-button"
+                data-definition="aa"
+                aria-label="About Amplitude of Accommodation">i</button>
       </span>
 
       <span class="control-value" id="aaValue">+5.00 D</span>
@@ -721,13 +877,11 @@ canvas {
     </div>
   </div>
 
-
   <div class="reset-row">
-    <button id="resetButton">Reset</button>
+    <button id="resetButton">Reset Everything</button>
   </div>
 
 </section>
-
 
 <div class="note">
   Simulation is an educational illustration. Actual visual experience varies between individuals.
@@ -735,8 +889,96 @@ canvas {
 
 </div>
 
+<!-- DEFINITION LIGHTBOX -->
+
+<div class="definition-lightbox" id="definitionLightbox" aria-hidden="true">
+  <div class="definition-box" role="dialog" aria-modal="true"
+       aria-labelledby="definitionTitle" aria-describedby="definitionText">
+    <button type="button" class="definition-close" id="definitionClose"
+            aria-label="Close definition">&times;</button>
+    <h2 class="definition-title" id="definitionTitle"></h2>
+    <p class="definition-text" id="definitionText"></p>
+  </div>
+</div>
 
 <script>
+
+/* --------------------------------
+   DEFINITION LIGHTBOX
+-------------------------------- */
+
+const definitions = {
+  specsphere: {
+    title: "Spectacle Sphere Diopter",
+    text: "The state of your spectacle's power. Ideally, it should correct as much prescription as possible without causing discomfort. The spectacle's power and your eye's power should be about the same."
+  },
+
+  sphere: {
+    title: "Eye Sphere Diopter",
+    text: "The state of your vision's depth. A longer eye ball sees near easier and a shorter eye ball sees far easier. People wear glasses to see depths that they can't see on their own. Ideally, glasses make a person becomes close to zero power."
+  },
+  cylinder: {
+    title: "Cylinder Diopter",
+    text: "Eye balls come in 2 shapes; perfect round like a soccerball or an uneven round; an oval like a rugby ball. Cylinder measures represents how much is the unevenness."
+  },
+  axis: {
+    title: "Cylinder Axis",
+    text: "The direction of the Cylinder unevenness. It is measured in degrees and it can be pointing from 0 to 180 degrees."
+  },
+  aa: {
+    title: "Amplitude of Accommodation (AA)",
+    text: "The eyes are naturally designed to see as far as it could when it relaxes, and they have a muscle which tightens up so you can focus on nearer objects. AA is the amount of strength your eye muscle can produce to see near clearly. It becomes weaker with age. That's when we need lenses to substitute for the loss of strength."
+  }
+};
+
+const definitionLightbox = document.getElementById("definitionLightbox");
+const definitionTitle = document.getElementById("definitionTitle");
+const definitionText = document.getElementById("definitionText");
+const definitionClose = document.getElementById("definitionClose");
+let lastDefinitionTrigger = null;
+
+function openDefinition(key, trigger) {
+  const definition = definitions[key];
+  if (!definition) return;
+
+  lastDefinitionTrigger = trigger;
+  definitionTitle.textContent = definition.title;
+  definitionText.textContent = definition.text;
+  definitionLightbox.classList.add("open");
+  definitionLightbox.setAttribute("aria-hidden", "false");
+  definitionClose.focus();
+}
+
+function closeDefinition() {
+  definitionLightbox.classList.remove("open");
+  definitionLightbox.setAttribute("aria-hidden", "true");
+
+  if (lastDefinitionTrigger) {
+    lastDefinitionTrigger.focus();
+    lastDefinitionTrigger = null;
+  }
+}
+
+document.querySelectorAll(".info-button").forEach(button => {
+  button.addEventListener("click", () => {
+    openDefinition(button.dataset.definition, button);
+  });
+});
+
+definitionClose.addEventListener("click", closeDefinition);
+
+definitionLightbox.addEventListener("click", event => {
+  if (event.target === definitionLightbox) {
+    closeDefinition();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && definitionLightbox.classList.contains("open")) {
+    closeDefinition();
+  }
+});
+
 
 /* --------------------------------
    PERFECT VISION ZONE
@@ -755,8 +997,7 @@ function updatePerfectVisionZone(slider, minZone, maxZone) {
 
 }
 
-
-// Sphere: -0.25 D to +0.25 D
+// Eye Sphere: -0.25 D to +0.25 D
 
 updatePerfectVisionZone(
   document.getElementById("sphere"),
@@ -764,6 +1005,13 @@ updatePerfectVisionZone(
   0.25
 );
 
+// Spectacle Sphere: -0.25 D to +0.25 D
+
+updatePerfectVisionZone(
+  document.getElementById("spectacleSphere"),
+  -0.25,
+  0.25
+);
 
 // Cylinder: -0.25 D to 0.00 D
 
@@ -795,27 +1043,21 @@ const distances = [
 const imageURLs = [
 
   // Far — mountain scenery
-
   "https://images.unsplash.com/photo-1565209216345-efdd627e46b2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Intermediate Far — 2 metres
-
   "https://images.unsplash.com/photo-1646861039459-fd9e3aabf3fb?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Intermediate Far — 1 metre
-
   "https://images.unsplash.com/photo-1760624591122-e587b406b391?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Intermediate Near — 50 cm
-
   "https://images.unsplash.com/photo-1586880244406-556ebe35f282?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Near — 40 cm
-
   "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
 
   // Near — 30 cm
-
   "https://images.unsplash.com/photo-1584022068212-4bcfb5e9eb49?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
 
 ];
@@ -849,11 +1091,15 @@ const images = imageURLs.map(url => {
 -------------------------------- */
 
 const sphereInput = document.getElementById("sphere");
+const spectacleSphereInput = document.getElementById("spectacleSphere");
+
 const cylinderInput = document.getElementById("cylinder");
 const cylinderAxisInput = document.getElementById("cylinderAxis");
 const aaInput = document.getElementById("aa");
 
 const sphereValue = document.getElementById("sphereValue");
+const spectacleSphereValue = document.getElementById("spectacleSphereValue");
+
 const cylinderValue = document.getElementById("cylinderValue");
 const cylinderAxisValue = document.getElementById("cylinderAxisValue");
 const aaValue = document.getElementById("aaValue");
@@ -1286,8 +1532,19 @@ function renderPanel(index) {
   ctx.clearRect(0, 0, width, height);
 
 
-  const sphere =
+  // Read eye and spectacle sphere independently
+
+  const eyeSphere =
     Number(sphereInput.value);
+
+  const spectacleSphere =
+    Number(spectacleSphereInput.value);
+
+  // Combined spherical power
+
+  const netSphere =
+    eyeSphere - spectacleSphere;
+
 
   const cylinder =
     Number(cylinderInput.value);
@@ -1302,19 +1559,19 @@ function renderPanel(index) {
     distances[index];
 
 
-  // Calculate spherical defocus
+  // Calculate spherical defocus using net sphere
 
   const defocus = calculateDefocus(
-    sphere,
+    netSphere,
     distance,
     aa
   );
 
 
-  // Calculate working effort
+  // Calculate working effort using net sphere
 
   const workingEffort = calculateWorkingEffort(
-    sphere,
+    netSphere,
     distance,
     aa
   );
@@ -1391,51 +1648,52 @@ function renderPanel(index) {
   effortElement.textContent =
     `Effort: ${effortValue} D - ${effortPercentage}`;
 
-// Working Effort colour thresholds
 
-effortElement.className = "working-effort";
+  // Working Effort colour thresholds
 
-if (workingEffort.percentageUsed !== null) {
+  effortElement.className = "working-effort";
 
-  if (workingEffort.percentageUsed > 90) {
+  if (workingEffort.percentageUsed !== null) {
 
-    effortElement.classList.add("danger");
+    if (workingEffort.percentageUsed > 90) {
 
-  } else if (workingEffort.percentageUsed >= 80) {
+      effortElement.classList.add("danger");
 
-    effortElement.classList.add("warning");
+    } else if (workingEffort.percentageUsed >= 80) {
+
+      effortElement.classList.add("warning");
+
+    }
 
   }
 
-}
 
+  // Update panel background and status
 
-// Update panel background and status
+  const card = canvas.closest(".vision-card");
 
-const card = canvas.closest(".vision-card");
+  if (defocus < 0.01) {
 
-if (defocus < 0.01) {
+    card.className = "vision-card clear";
 
-  card.className = "vision-card clear";
+    statusElement.textContent = "Clear";
+    statusElement.className = "status clear";
 
-  statusElement.textContent = "Clear";
-  statusElement.className = "status clear";
+  } else if (defocus <= 0.75) {
 
-} else if (defocus <= 0.75) {
+    card.className = "vision-card semi-blur";
 
-  card.className = "vision-card semi-blur";
+    statusElement.textContent = "Semi-blur";
+    statusElement.className = "status semi-blur";
 
-  statusElement.textContent = "Semi-blur";
-  statusElement.className = "status semi-blur";
+  } else {
 
-} else {
+    card.className = "vision-card blur";
 
-  card.className = "vision-card blur";
+    statusElement.textContent = "Blur";
+    statusElement.className = "status blur";
 
-  statusElement.textContent = "Blur";
-  statusElement.className = "status blur";
-
-}
+  }
 
 }
 
@@ -1449,6 +1707,9 @@ function renderAll() {
   const sphere =
     Number(sphereInput.value);
 
+  const spectacleSphere =
+    Number(spectacleSphereInput.value);
+
   const cylinder =
     Number(cylinderInput.value);
 
@@ -1459,8 +1720,13 @@ function renderAll() {
     Number(aaInput.value);
 
 
+  // Display individual sphere values
+
   sphereValue.textContent =
     `${formatSigned(sphere)} D`;
+
+  spectacleSphereValue.textContent =
+    `${formatSigned(spectacleSphere)} D`;
 
   cylinderValue.textContent =
     `${formatSigned(cylinder)} D`;
@@ -1487,6 +1753,8 @@ function renderAll() {
 
 sphereInput.addEventListener("input", renderAll);
 
+spectacleSphereInput.addEventListener("input", renderAll);
+
 cylinderInput.addEventListener("input", renderAll);
 
 cylinderAxisInput.addEventListener("input", renderAll);
@@ -1502,6 +1770,8 @@ document.getElementById("resetButton")
   .addEventListener("click", () => {
 
     sphereInput.value = 0;
+
+    spectacleSphereInput.value = 0;
 
     cylinderInput.value = 0;
 
