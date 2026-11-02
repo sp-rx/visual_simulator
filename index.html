@@ -67,7 +67,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 16px;
-  row-gap: 25px;
+  row-gap: 15px;
 
   background: var(--panel);
   border: 1px solid var(--line);
@@ -113,7 +113,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  margin-bottom: 0px;
+  margin-bottom: -7px;
 }
 
 .control-name {
@@ -192,10 +192,10 @@ input[type="range"]::-moz-range-thumb {
 .range-limits {
   display: flex;
   justify-content: space-between;
-  gap: 5px;
+  gap: 0px;
   font-size: 10px;
   color: var(--muted);
-  margin-top: 3px;
+  margin-top: -7px;
 }
 
 .reset-row {
@@ -266,7 +266,7 @@ button:hover {
 .canvas-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 8;
   background: #E8E5DD;
   overflow: hidden;
 }
@@ -738,8 +738,10 @@ canvas {
     >
 
     <div class="range-limits">
-      <span>−5.00 D</span>
+      <span>-5.00 D</span>
+      <span>-2.50 D</span>
       <span>0.00 D</span>
+      <span>+2.50 D</span>
       <span>+5.00 D</span>
     </div>
   </div>
@@ -770,8 +772,10 @@ canvas {
     >
 
     <div class="range-limits">
-      <span>−5.00 D</span>
+      <span>-5.00 D</span>
+      <span>-2.50 D</span>
       <span>0.00 D</span>
+      <span>+2.50 D</span>
       <span>+5.00 D</span>
     </div>
   </div>
